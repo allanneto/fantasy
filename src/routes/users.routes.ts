@@ -15,4 +15,14 @@ userRouter.post('/', async (req, res) => {
   return res.json(user);
 });
 
+userRouter.get('/', async (req, res) => {
+  const usersRepository = new UsersRepository();
+
+  console.log(req.query);
+
+  const users = await usersRepository.find(req.query);
+
+  return res.json(users);
+});
+
 export default userRouter;

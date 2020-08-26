@@ -38,7 +38,9 @@ export default class CreateUserService {
       avatar_id,
     };
 
-    if (!(await schema.isValid(userDTO))) {
+    const validate = await schema.isValid(userDTO);
+
+    if (!validate) {
       throw new AppError('Falha na validação dos campos');
     }
 

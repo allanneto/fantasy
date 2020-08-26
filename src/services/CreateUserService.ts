@@ -25,7 +25,7 @@ export default class CreateUserService {
     const schema = Yup.object().shape({
       email: Yup.string().email().required(),
       name: Yup.string().required(),
-      avatar_id: Yup.string().uuid().required(),
+      avatar_id: Yup.string().uuid(),
       password: Yup.string().min(8).required(),
       telephone: Yup.string().min(11).required(),
     });
@@ -38,9 +38,7 @@ export default class CreateUserService {
       avatar_id,
     };
 
-    const validSchema = await schema.isValid(userDTO);
-
-    if (!validSchema) {
+    if (!(await schema.isValid(userDTO))) {
       throw new AppError('Falha na validação dos campos');
     }
 

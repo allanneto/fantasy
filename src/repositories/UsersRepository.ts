@@ -1,11 +1,11 @@
 import { getRepository, Repository } from 'typeorm';
 
-import * as Yup from 'yup';
-
 import InterfaceCreateUserDTO from '../dtos/InterfaceCreateUserDTO';
 import User from '../models/User';
 
 import UsersRepositoryInterface from './interfaces/UsersRepositoryInterface';
+
+import AppError from '../errors/AppError';
 
 class UsersRepository implements UsersRepositoryInterface {
   private ormRepository: Repository<User>;
@@ -32,6 +32,12 @@ class UsersRepository implements UsersRepositoryInterface {
     const user = this.ormRepository.create(userInfo);
 
     await this.ormRepository.save(user);
+
+    return user;
+  }
+
+  public async checkUser(email: string): Promise<User | undefined> {
+    const user = await this.ormRepository.findOne({ where: { email } });
 
     return user;
   }

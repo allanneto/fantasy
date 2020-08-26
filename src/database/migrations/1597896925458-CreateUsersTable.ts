@@ -22,6 +22,10 @@ export class CreateUsersTable1597896925458 implements MigrationInterface {
             isUnique: true,
           },
           {
+            name: 'password',
+            type: 'varchar',
+          },
+          {
             name: 'name',
             type: 'varchar',
           },
@@ -32,6 +36,7 @@ export class CreateUsersTable1597896925458 implements MigrationInterface {
           {
             name: 'avatar_id',
             type: 'varchar',
+            isNullable: true,
           },
           {
             name: 'created_at',

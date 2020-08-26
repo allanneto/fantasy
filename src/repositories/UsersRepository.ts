@@ -21,24 +21,17 @@ class UsersRepository implements UsersRepositoryInterface {
     password,
     telephone,
   }: InterfaceCreateUserDTO): Promise<User> {
-    const schema = Yup.object().shape({
-      email: Yup.string().email().required(),
-      name: Yup.string().required(),
-      avatar_id: Yup.string().uuid().required(),
-      password: Yup.string().min(8).required(),
-      telephone: Yup.string().min(11).required(),
-    });
-
-    const user = {
-      id: 'sada',
+    const userInfo = {
       email,
       name,
       avatar_id,
       password,
       telephone,
-      created_at: new Date(),
-      updated_at: new Date(),
     };
+
+    const user = this.ormRepository.create(userInfo);
+
+    await this.ormRepository.save(user);
 
     return user;
   }

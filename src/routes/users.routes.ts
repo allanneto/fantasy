@@ -8,9 +8,7 @@ userRouter.get('/', async (req, res) => {
 
   const user = await usersRepository.create(req.body);
 
-  console.log(user);
-
-  return res.json({ message: 'allexin one republikkkkkkk' });
+  return res.json(user);
 });
 
 export default userRouter;

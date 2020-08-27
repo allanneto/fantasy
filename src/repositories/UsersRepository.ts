@@ -3,6 +3,7 @@ import { getRepository, Repository, Like } from 'typeorm';
 import * as Yup from 'yup';
 import InterfaceCreateUserDTO from '../dtos/InterfaceCreateUserDTO';
 import InterfaceFindUser from '../dtos/InterfaceFindUser';
+import InterfaceUpdateUser from '../dtos/InterfaceUpdateUser';
 
 import User from '../models/User';
 
@@ -69,6 +70,30 @@ class UsersRepository implements UsersRepositoryInterface {
     });
 
     return users;
+  }
+
+  public async update({
+    id,
+    avatar_id,
+    name,
+    telephone,
+  }: InterfaceUpdateUser): Promise<User> {
+    const user = await this.ormRepository.findOne(id);
+
+    if (!user) {
+      throw new AppError('Id informado não consta na base de dados');
+    }
+
+    const updatedUser = {
+      ...user,
+      name: name || user.name,
+      avatar_id: avatar_id || user.avatar_id,
+      telephone: telephone || user.telephone,
+    };
+
+    await this.ormRepository.save(updatedUser);
+
+    return updatedUser;
   }
 }
 

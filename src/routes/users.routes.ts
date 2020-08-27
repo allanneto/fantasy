@@ -2,10 +2,11 @@ import { Router } from 'express';
 import UsersRepository from '../repositories/UsersRepository';
 
 import CreateUserService from '../services/CreateUserService';
+import UpdateUserService from '../services/UpdateUserService';
 
-const userRouter = Router();
+const usersRouter = Router();
 
-userRouter.post('/', async (req, res) => {
+usersRouter.post('/', async (req, res) => {
   const usersRepository = new UsersRepository();
 
   const createUser = new CreateUserService(usersRepository);
@@ -15,14 +16,26 @@ userRouter.post('/', async (req, res) => {
   return res.json(user);
 });
 
-userRouter.get('/', async (req, res) => {
+usersRouter.post('/:id', async (req, res) => {
   const usersRepository = new UsersRepository();
+  const updateUser = new UpdateUserService(usersRepository);
 
-  console.log(req.query);
+  const { id } = req.params;
+
+  const user = await updateUser.execute({
+    ...req.body,
+    id,
+  });
+
+  return res.json(user);
+});
+
+usersRouter.get('/', async (req, res) => {
+  const usersRepository = new UsersRepository();
 
   const users = await usersRepository.find(req.query);
 
   return res.json(users);
 });
 
-export default userRouter;
+export default usersRouter;

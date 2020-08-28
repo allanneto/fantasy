@@ -9,7 +9,7 @@ interface Request {
   password: string;
   name: string;
   telephone: string;
-  avatar_id: string;
+  avatar_id?: string;
 }
 
 export default class CreateUserService {

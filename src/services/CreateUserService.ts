@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { hash } from 'bcryptjs';
 import User from '../models/User';
 import UsersRepositoryInterface from '../repositories/interfaces/UsersRepositoryInterface';
 
@@ -30,7 +31,7 @@ export default class CreateUserService {
       telephone: Yup.string().min(11).required(),
     });
 
-    const userDTO = {
+    const userInfo = {
       email,
       name,
       password,
@@ -38,11 +39,18 @@ export default class CreateUserService {
       avatar_id,
     };
 
-    const validate = await schema.isValid(userDTO);
+    const validate = await schema.isValid(userInfo);
 
     if (!validate) {
       throw new AppError('Falha na validação dos campos');
     }
+
+    const hashedpassword = await hash(password, 8);
+
+    const userDTO = {
+      ...userInfo,
+      password: hashedpassword,
+    };
 
     const user = await this.usersRepository.create(userDTO);
 
